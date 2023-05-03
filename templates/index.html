@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+
+    
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0"></script>
+     </head>
+  <body>
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Artificial Music Player</h1>  
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <div>
+<midi-visualizer type="piano-roll" id="mainVisualizer" src="https://cdn.jsdelivr.net/gh/cifkao/html-midi-player@2b12128/jazz.mid"></midi-visualizer>
+<midi-player src="https://cdn.jsdelivr.net/gh/cifkao/html-midi-player@2b12128/jazz.mid" sound-font="" visualizer="#mainVisualizer" id="mainPlayer">
+</midi-player>
+</div>
+
+<p>
+<label for="midiFile">Load MIDI file:</label>
+<input type="file" id="midiFile" name="midiFile" accept="audio/midi, audio/x-midi" />
+</p>
+
+    </main>
+
+    <button onclick="download()">Generate File</button>
+    <script>
+        function download() {
+            window.location.href = '/predict';
+        }
+    </script>
+    <script type="module" src="{{url_for('static', filename='index.js')}}"></script> 
+    <script>
+        const player = core;
+        window.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.getElementById('midiFile');
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                player.blobToNoteSequence(e.target.files[0]).then((seq) => {
+                    console.log("Running")
+                    document.getElementById('mainPlayer').noteSequence = seq;
+                    document.getElementById('mainVisualizer').noteSequence = seq;
+                }).catch((reason) => {
+                    alert('Failed to load MIDI file.');
+                    console.error(reason);
+                });
+            });
+        }
+        });
+    </script>
+  </body>
+</html>

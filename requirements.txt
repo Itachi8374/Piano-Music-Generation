@@ -1,0 +1,9 @@
+tensorflow
+pretty_midi
+gunicorn
+flask
+IPython
+numpy
+tqdm
+numpy
+matplotlib
